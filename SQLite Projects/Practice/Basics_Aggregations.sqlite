@@ -1,0 +1,69 @@
+/*
+Aggregation:
+
+Aggregation Functions: These functions compute a single result from
+input values
+- SUM():
+    - Adds together all values in a specific column
+- COUNT():
+    - Counts the number of rows that match a specified critierion
+- COUNT(DISTINCT column):
+    - Gives the distinct count of rows that matches the specified critieria
+- AVG():
+    - Calculates the average value of a numeric column
+- MAX():
+    - Finds the maximum value in a set of values
+- MIN():
+    - Finds the minimum value 
+
+Used in conjunction w/GROUP BY and/or HAVING
+- GROUP BY:
+    - Group rows that share a property so that aggregate functions
+    can be applied
+    - Groups rows that have the same values into summary rows
+    - Note: If you have an aggregate function, you need to include every column
+    that's not aggregated(if not it gives an error)
+- HAVING:
+    - Filter groups based on the result of an aggregate function
+    (unlike WHERE, which filters rows)
+    - Filter query based on aggregate functions and groupings
+    - Used because you can't use aggregate functions in 'WHERE'
+*/
+SELECT
+	SUM(salary_year_avg) AS salary_sum
+FROM job_postings_fact;
+
+SELECT
+	SUM(salary_year_avg) AS salary_sum
+FROM job_postings_fact;
+
+SELECT
+	COUNT(DISTINCT job_title_short) AS job_type_total
+FROM job_postings_fact;
+
+SELECT
+	AVG(salary_year_avg) AS salary_avg
+FROM job_postings_fact
+WHERE job_title_short = 'Data Analyst';
+
+SELECT
+	AVG(salary_year_avg) AS salary_avg,
+    MIN(salary_year_avg) AS salary_min,
+    MAX(salary_year_avg) AS salary_max
+FROM job_postings_fact
+WHERE job_title_short = 'Data Analyst';
+
+SELECT
+	job_title_short AS jobs,
+	AVG(salary_year_avg) AS salary_avg,
+    MIN(salary_year_avg) AS salary_min,
+    MAX(salary_year_avg) AS salary_max
+FROM job_postings_fact
+GROUP BY job_title_short
+ORDER BY salary_avg;
+
+/*
+Practice Problem:
+- Calculates the current month's total earnings per project.
+- Calculate a scenario where the hourly rate increases by $5
+*/

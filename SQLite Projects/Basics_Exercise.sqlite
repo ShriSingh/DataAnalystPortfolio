@@ -1,0 +1,236 @@
+/*
+Pracice Problem 1:
+Get the unique(distinct) job locations in the 'job_postings_fact' table. Order
+in alphabetical order(ascending order).
+*/
+SELECT DISTINCT
+	job_posts.job_location
+FROM job_postings_fact job_posts
+ORDER BY job_location ASC;
+
+/*
+Practice Problem 2:
+In the 'job_postings_fact' table get the columns 'job_id', 'job_title_short',
+'job_location', and 'job_via' columns. And order it in ascending order by 'job_location'
+*/
+SELECT
+	job_id,
+    job_title_short,
+    job_location,
+    job_via
+FROM job_postings_fact
+ORDER BY job_location ASC;
+
+/*
+Practice Problem 3:
+In the 'job_postings_fact' table get the columns 'job_id', 'job_title_short', 'job_location',
+'job_via', and 'salary_year_avg' columns. And only look at rows where 'job_title_short is 
+'Data Engineer'
+*/
+SELECT
+	job_id,
+    job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_title_short = 'Data Engineer';
+
+/*
+Practice Problem 4:
+In the 'job_postings_fact' table get the 'job_id', 'job_title_short', 'job_location', 
+'job_via', and 'salary_year_avg' columns. Only return rows where the job location is in
+'Tampa, FL'.
+*/
+SELECT 
+	job_id,
+    job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_location IN ('Tampa, FL');
+
+/*
+Practice Problem 5:
+In the 'job_positings_fact' table get the 'job_id', 'job_title_short', 'job_location',
+'job_via', and 'salary_year_avg' columns. Only return 'Full-Time' jobs.
+*/
+SELECT
+	job_id,
+    job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_schedule_type IN ('Full-time');
+
+/*
+Practice Problem 6:
+In the 'job_postings_fact' table get the 'job_id', 'job_title_short', 'job_location',
+'job_via', and 'salary_year_avg' columns. Only look at the jobs that are not 'Part-Time'
+jobs.
+*/
+SELECT
+	job_id,
+    job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg,
+    job_schedule_type
+FROM job_postings_fact
+WHERE job_schedule_type <> 'Part-Time';
+
+/*
+Practice Problem 7:
+Get job details for BOTH 'Data Analyst' or 'Business Analyst' positions
+- For 'Data Analyst', I want jobs only > $100K
+- For 'Business Analyst', I want job only > $70K
+Only include jobs located in EITHER:
+- 'Boston, MA'
+- 'Anywhere'(i.e., 'Remote Jobs')
+*/
+SELECT
+    job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE
+	(
+		(job_title_short = 'Data Analyst' AND salary_year_avg > 100000) OR
+    	(job_title_short = 'Business Analyst' AND salary_year_avg > 70000)
+    ) AND
+    job_location IN ('Boston, MA', 'Anywhere');
+
+/*
+Practice Problem 8:
+In the 'company_dim' table, find all the company names that include 'Tech'
+immediately followed be any single character. Return the 'name' column
+*/
+SELECT name 
+FROM company_dim
+WHERE name LIKE 'Tech%';
+
+/*
+Practice Problem 9:
+Find all the job postings in the 'job_postings_fact', where the 'job_title' is exactly
+"Engineer" and one character followed after the term. Get the 'job_id', 'job_title',
+and 'job_posted_date'.
+*/
+SELECT
+	job_id,
+    job_title,
+    job_posted_date
+FROM job_postings_fact
+WHERE job_title LIKE 'Engineer%';
+
+/*
+Practice Problem 10
+From the 'job_positings_fact' return the following columns: 'job_id', 'job_title_short',
+'job_location', 'job_via', 'job_posted_date', and 'salary_year_avg'. Also, rename the 
+following: 'job_via' to 'job_posted_site' and 'salary_year_avg' to 'avg_yearly_salary'
+*/
+SELECT
+	job_id,
+    job_title_short,
+    job_location,
+    job_via AS job_posted_site,
+    salary_year_avg AS avg_yearly_salary
+FROM job_postings_fact;
+
+/*
+Practice Problem 11:
+Look for non-senior data analyst or business analyst roles
+    - Only get job title that inlcude either 'Data or 'Business'
+    - Also includes those with 'Analyst' in any part of the title
+    - Don't include any job titles with 'Senior' followed by any character
+Get the 'job_title', 'location', and 'average_yearly_salary'
+*/
+SELECT
+	job_title,
+    job_location AS location,
+    salary_year_avg AS 'Average Yearly Salary'
+FROM job_postings_fact
+WHERE 
+	(job_title LIKE '%Data%' OR job_title LIKE '%Business') AND
+	job_title LIKE '%Analyst%' AND
+    job_title NOT LIKE 'Senior%';
+
+/*
+Pracice Problem 12:
+In the 'invoices_fact' table, add the 'hours_spent' to the 'hours_rate'.
+This could be used to priortize tasks, higher values could indicate tasks
+that are both time-intensicve and costly, therefore requiring early attention.
+*/
+SELECT
+	hours_spent,
+    hours_rate,
+    (hours_spent + hours_rate) AS hours_total
+FROM invoices_fact;
+
+/*
+Practice Problem 13:
+In the 'invoices_fact' table divide the hours_spent by the 'hours_rate'. Return
+the 'activity_id' as well. This helps give us an efficiency ration a lower ratio
+could indicate a more cost-efficient task.
+*/
+SELECT
+	activity_id,
+    hours_spent,
+    hours_rate,
+    (hours_spent / hours_rate) AS efficiency
+FROM invoices_fact;
+
+/*
+Practice Problem 14:
+In the 'job_positings_fact' table calculate the total sum of the average yearly 
+salary(salary_year_avg) for all job postings that are marked as fully Remote
+(job_work_from_home = TRUE) and divide it by the total count of 'salary_year_avg'.
+*/
+SELECT
+	SUM(job_posts.salary_year_avg) / COUNT(job_posts.salary_year_avg) AS 'Average Salary per Person'
+FROM job_postings_fact job_posts
+WHERE job_posts.job_work_from_home = TRUE;
+
+/*
+Practice Problem 15:
+In the 'job_positings_fact' table count the total number of job postings that offer
+health insurance. Use the 'job_health_insurance' column to determine if a job
+posting offers health insurance(TRUE means it offer health insurance)
+*/
+SELECT
+	job_posts.job_health_insurance,
+	COUNT(job_posts.job_health_insurance)
+FROM job_postings_fact job_posts
+WHERE job_posts.job_health_insurance = TRUE;
+
+/*
+Practice Problem 16:
+In the 'job_positings_fact' table count the number of job postings available for 
+each country. Use the 'job_country' column to group the job postings, and count
+the number number of job postings('job_id') within each country group.
+*/
+SELECT
+	job_posts.job_country,
+	COUNT(job_posts.job_id)
+FROM job_postings_fact job_posts
+GROUP BY job_posts.job_country;
+
+/*
+Practice Problem 17:
+Find the average salary and number of job postings for each skill for this:
+- Use 'LEFT JOIN' to combine 'skills_dim', 'skills_job_dim', and 'job_postings_fact'
+tables
+*/
+SELECT
+    skills.skills AS 'Skill Required',
+	COUNT(job_posts.job_id) AS 'Number of Jobs for the Posting',
+	AVG(job_posts.salary_year_avg) AS 'Average Salary for Skill'
+FROM skills_dim skills
+LEFT JOIN skills_job_dim AS skills_to_job
+	ON skills_to_job.skill_id = skills.skill_id
+LEFT JOIN job_postings_fact AS job_posts
+	ON job_posts.job_id = skills_to_job.job_id
+GROUP BY skills.skills
+ORDER BY 'Average Salary for Skill' DESC;

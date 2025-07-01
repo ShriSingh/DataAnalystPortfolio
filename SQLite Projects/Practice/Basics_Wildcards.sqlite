@@ -1,0 +1,27 @@
+/*
+Wildcards:
+- Used to substitute one or more characters in a string
+- Wildcards are used with the 'LIKE' operator
+- All of this (i.e. 'LIKE', '%', and '_') is used in the 'WHERE' clause
+
+'%' operator:
+- Represents zero, one, or more characters
+
+'_' operator:
+- Represents one, single character
+*/
+SELECT
+	job_id,
+    job_title,
+	job_title_short,
+    job_location
+FROM job_postings_fact
+WHERE job_title LIKE '%Analyst';
+
+SELECT
+	job_id,
+    job_title,
+	job_title_short,
+    job_location
+FROM job_postings_fact
+WHERE job_title LIKE '%Business_Analyst%';

@@ -1,0 +1,84 @@
+/*
+SQL JOINs (Consider Table A, on the left side, and Table B, on the right side)
+- LEFT JOIN
+    - Selecting all the contents from Table A and the contents match between 
+    A and B
+- RIGHT JOIN
+    - Selecting all the contents from Table B and the contents that match between
+    A and B
+- INNER JOIN
+    - Only selecting the contents that match between A and B
+- FULL OUTER JOIN
+    - Combines all the contents from both tables, whether they match or not
+    - Rarely used
+
+Note: LEFT, RIGHT, and INNER JOIN are the most used ones
+*/
+SELECT 
+	job_posts.job_id,
+    job_posts.job_title_short,
+    companies.name AS companies
+FROM job_postings_fact AS job_posts
+LEFT JOIN company_dim AS companies
+	ON job_posts.company_id = companies.company_id;
+
+SELECT 
+	job_posts.job_id,
+    job_posts.job_title_short,
+    companies.name AS companies
+FROM job_postings_fact AS job_posts
+RIGHT JOIN company_dim AS companies
+	ON job_posts.company_id = companies.company_id;
+
+SELECT 
+	job_posts.job_id,
+    job_posts.job_title,
+    skills_to_job.skill_id
+FROM job_postings_fact job_posts
+INNER JOIN skills_job_dim AS skills_to_job 
+	ON job_posts.job_id = skills_to_job.job_id;
+
+SELECT 
+	job_posts.job_id,
+    job_posts.job_title,
+    skills_to_job.skill_id,
+    skills.skills
+FROM job_postings_fact job_posts
+INNER JOIN skills_job_dim AS skills_to_job 
+	ON job_posts.job_id = skills_to_job.job_id
+INNER JOIN skills_dim AS skills
+	ON skills_to_job.skill_id = skills.skill_id;
+
+
+/*
+Practice Problem:
+Retrieve the list of job titles('job_title') and the corresponding company names
+('name') for all job postings that mention 'Data Scientist' in the job title.
+Use the 'job_postings_fact' and the 'company_dim' tables for this query.
+*/
+SELECT
+	job_posts.job_title,
+    companies.name
+FROM job_postings_fact job_posts
+LEFT JOIN company_dim companies
+	ON job_posts.company_id = companies.company_id
+WHERE job_posts.job_title = 'Data Scientist';
+
+/*
+Practice Problem:
+Fetch all job postings, including their job titles('job_title') and the names of 
+the skills required('skills'), even if no skills are listed for a job. Ensure that
+the job is located in 'New York' and offers 'Health Insurance'. Use the 
+'job_positings_fact', 'skills_job_dim', and 'skills_dim' tables.
+*/
+SELECT
+	job_posts.job_title,
+    skills.skills
+FROM job_postings_fact job_posts
+LEFT JOIN skills_job_dim skills_to_job
+	ON job_posts.job_id = skills_to_job.job_id
+LEFT JOIN skills_dim skills
+	ON skills_to_job.skill_id = skills.skill_id
+WHERE 
+	job_posts.job_location = 'New York' AND
+    job_posts.job_health_insurance IS TRUE;

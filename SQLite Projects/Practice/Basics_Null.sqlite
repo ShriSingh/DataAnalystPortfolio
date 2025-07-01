@@ -1,0 +1,40 @@
+/*
+NULL Values:
+- NULL: A field with no value
+    - This differs from a field with '0' value or a field 
+    containing spaces(i.e., " ")
+- The following commands are used within a 'WHERE' or 'HAVING' clause
+*/
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE salary_year_avg IS NOT NULL
+ORDER BY salary_year_avg
+
+/*
+Practice Problem:
+Get all skills from the 'skills_dim' table that don't have a 'type'
+classification assigned to them. Return the 'skill_id' and 'skills'.
+*/
+SELECT
+	skill_id,
+    skills
+FROM skills_dim
+WHERE typeof(skills) IS NULL;
+
+/*
+Practice Problem:
+Identify all job positings that have neither an annual average salary
+('salary_year_avg') nor an hourly average salary('salary_hour_avg') in
+the 'job_postings_fact' table. Return the 'job_id', 'job_title', 
+'salary_hour_avg'.
+*/
+SELECT
+	job_id,
+    job_title,
+    salary_hour_avg
+FROM job_postings_fact
+WHERE salary_year_avg IS NULL AND salary_hour_avg IS NULL;

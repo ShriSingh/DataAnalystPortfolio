@@ -1,0 +1,48 @@
+/*
+Operations:
+
+Arithmetic Operations:
+- These operations are used to perform mathmetical calculations
+    - Addition('+'): Adds two numbers together
+    - Subtraction('-'): Subtracts the second number from the first
+    - Multiplication('*'): Multiplies two numbers
+    - Division('/'): Divides the first number by the second
+    - Modulus('%'): Returns the remainder of a division approach
+
+Examples of Locations used:
+1. SELECT clause
+    - For performing calculations on data retrieved from the databases
+    - SELECT salary, salary * 0.1 AS bonus FROM employees;
+2. WHERE clause
+    - For filtering data based on conditions that may involve Arithmetic
+    or logical operations
+    - SELECT * FROM orders WHERE (quantity * unit_price) > 100;
+3. ORDER BY clause
+    - For sorting the results based on expressions involving operations
+    - SELECT name, age, (current_date - birth_date) / 365 AS age_years FROM
+    people ORDER BY (current_date - birth_date) / 365
+4. GROUP BY and HAVING clause
+    - For grouping rows that have the same values in specified columns and filtering
+    groups with conditions involving operations
+    - SELECT department, SUM(salary) FROM employees GROUP BY department HAVING
+    SUM(salary) > 100000;
+*/
+SELECT 
+	project_company,
+    nerd_id,
+    nerd_role,
+    hours_rate AS 'Original Rate',
+    hours_rate + 5 AS 'Rate Hike',
+    hours_rate - 5 AS 'Rate Drop'
+FROM invoices_fact;
+
+SELECT 
+	project_company,
+    nerd_id,
+    nerd_role,
+    hours_rate AS rate_original,
+    hours_rate + 5 AS rate_hike,
+    (hours_rate + 5) * hours_spent AS project_total
+FROM invoices_fact
+WHERE 
+	project_total > 1000;

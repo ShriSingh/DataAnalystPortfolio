@@ -1,0 +1,66 @@
+/*
+Comparisons:
+- Used within the 'WHERE' or 'HAVING' clause
+- Used in conjunction with comparison operators: 
+    - '=': Equal to
+    - '<>': Not equal to
+    - '>': Greater than
+    - '<': Less than 
+    - '>=': Greater than or equal to
+    - '<=': Less than or equal to
+- Used in conjunction with logical operators:
+    - 'AND': 
+        - Only shows the records where all conditions are true
+        - Can have multiple 'AND' conditions
+    - 'OR':
+        - Only shows records when any of the conditions are true
+        - Can have multiple 'OR' conditions
+    - 'BETWEEN':
+        - Gets values within a given range
+        - Alternative to using 'AND', '<=', and '>='
+    - 'IN':
+        - Specify multiple values in a WHERE clause
+        - Alternative to using 'OR' operator
+*/
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_via <> 'via Ai-Jobs.net';
+
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE salary_year_avg > 50000
+ORDER BY salary_year_avg;
+
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_title_short = 'Data Analyst' AND salary_year_avg > 100000
+ORDER BY salary_year_avg;
+
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE salary_year_avg BETWEEN 100000 AND 200000
+ORDER BY salary_year_avg;
+
+SELECT
+	job_title_short,
+    job_location,
+    job_via,
+    salary_year_avg
+FROM job_postings_fact
+WHERE job_title_short IN ('Data Analyst', 'Data Engineer', 'Data Scientist');
