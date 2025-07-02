@@ -23,5 +23,5 @@ WHERE
     job_posts.job_location = 'Anywhere' AND
     job_posts.salary_year_avg IS NOT NULL
 ORDER BY
-    salary_year_avg DESC
+    job_posts.salary_year_avg DESC
 LIMIT 10;
